@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epic Kiosko · Núñez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:      #F7F4EE;
+  --surface: #FFFFFF;
+  --green:   #0F3B2E;
+  --green-l: #e8f0ec;
+  --terra:   #C8602A;
+  --text:    #111a15;
+  --sub:     #7a8c82;
+  --line:    #e2ddd6;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+.page { max-width: 600px; margin: 0 auto; padding: 0 20px 80px; }
+
+/* HEADER */
+header {
+  padding: 44px 0 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1.5px solid var(--green);
+  margin-bottom: 32px;
+}
+.eyebrow { font-size: 10px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--sub); margin-bottom: 8px; }
+.wordmark { font-family: 'DM Serif Display', serif; font-size: clamp(38px, 10vw, 58px); color: var(--green); line-height: .92; letter-spacing: -.02em; }
+.wordmark em { font-style: italic; color: var(--terra); }
+.submark { font-size: 10px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--sub); margin-top: 10px; }
+.sede-right { text-align: right; padding-bottom: 4px; }
+.sede-label { font-size: 9px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--sub); display: block; margin-bottom: 4px; }
+.sede-val { font-family: 'DM Serif Display', serif; font-style: italic; font-size: clamp(26px, 7vw, 40px); color: var(--terra); line-height: 1; }
+
+/* FILTER */
+.filter-bar { display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
+.pill { appearance: none; background: var(--surface); border: 1.5px solid var(--line); color: var(--sub); font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: .06em; padding: 7px 16px; border-radius: 100px; cursor: pointer; transition: all .15s; }
+.pill:hover { border-color: var(--green); color: var(--green); }
+.pill.active { background: var(--green); border-color: var(--green); color: #fff; font-weight: 600; }
+
+/* CATEGORY */
+.cat-block { margin-bottom: 40px; }
+.cat-label { font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--terra); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+.cat-label::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+/* ITEM */
+.item { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; background: var(--surface); border-radius: 12px; margin-bottom: 8px; text-decoration: none; color: inherit; border: 1.5px solid transparent; transition: border-color .15s, box-shadow .15s; }
+.item:not(.disabled):hover { border-color: var(--terra); box-shadow: 0 4px 20px rgba(200,96,42,.1); }
+.item.disabled { opacity: .5; }
+.item-name { font-family: 'DM Serif Display', serif; font-size: clamp(17px, 4vw, 21px); color: var(--text); line-height: 1.2; }
+.item-sub { font-size: 11px; font-weight: 400; color: var(--sub); margin-top: 3px; display: flex; align-items: center; gap: 8px; }
+.soon-tag { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--terra); background: rgba(200,96,42,.1); padding: 2px 7px; border-radius: 4px; }
+.item-right { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+.item-price { font-family: 'DM Serif Display', serif; font-size: clamp(20px, 4.5vw, 26px); color: var(--terra); letter-spacing: -.02em; white-space: nowrap; }
+.item-chevron { width: 32px; height: 32px; background: var(--green-l); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--green); font-size: 14px; flex-shrink: 0; transition: background .15s, color .15s; }
+.item:not(.disabled):hover .item-chevron { background: var(--terra); color: #fff; }
+
+/* LOADING / ERROR */
+.status-msg { text-align: center; padding: 48px 0; color: var(--sub); font-size: 14px; }
+.status-msg .dot { display: inline-block; animation: pulse 1.2s ease-in-out infinite; }
+.status-msg .dot:nth-child(2) { animation-delay: .2s; }
+.status-msg .dot:nth-child(3) { animation-delay: .4s; }
+@keyframes pulse { 0%,80%,100% { opacity: .2 } 40% { opacity: 1 } }
+
+/* STOCK badge */
+.stock-ok   { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: #e8f5e9; color: #2e7d32; padding: 2px 7px; border-radius: 4px; }
+.stock-low  { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: #fff3e0; color: #e65100; padding: 2px 7px; border-radius: 4px; }
+.stock-out  { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: #fce4e4; color: #c62828; padding: 2px 7px; border-radius: 4px; }
+
+/* FOOTER */
+footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; }
+.footer-t { font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--sub); opacity: .6; }
+
+/* last-updated */
+.last-updated { text-align: center; font-size: 10px; color: var(--sub); opacity: .5; margin-bottom: 24px; letter-spacing: .04em; }
+
+@media (max-width: 420px) {
+  .page { padding: 0 16px 60px; }
+  header { padding-top: 32px; }
+  .item { padding: 14px 16px; }
+  .item-chevron { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="brand-left">
+      <div class="eyebrow">Cannabis Co. · Est. 2023</div>
+      <div class="wordmark">epic <em>farms</em><sup style="font-size:.3em;vertical-align:super;font-style:normal;color:var(--sub)">®</sup></div>
+      <div class="submark">Menú · Solo socios</div>
+    </div>
+    <div class="sede-right">
+      <span class="sede-label">Sede</span>
+      <span class="sede-val">Núñez</span>
+    </div>
+  </header>
+
+  <div class="filter-bar" id="filter-bar"></div>
+  <div id="last-updated" class="last-updated"></div>
+  <div id="menu-body"></div>
+
+  <footer>
+    <span class="footer-t">Epic Farms®</span>
+    <span class="footer-t">Solo socios</span>
+  </footer>
+
+</div>
+<script>
+// ════════════════════════════════════════════════════════
+//  CONFIGURACIÓN — única línea que cambia entre sedes
+// ════════════════════════════════════════════════════════
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKDGa2b0ZORXwUuZRWq1LTLZKQybL3nh4Dh0O24S0EcJxJdHUurgCC0sgZNMvBNh0Y/exec";
+// ════════════════════════════════════════════════════════
+
+const fmt = n => "$ " + Number(n).toLocaleString("es-AR");
+let active = "Todas";
+let allProducts = [];
+
+// ── Carga datos desde Google Sheets vía Apps Script ──
+async function loadMenu() {
+  document.getElementById("menu-body").innerHTML = `
+    <div class="status-msg">
+      Cargando menú<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+    </div>`;
+
+  // Si no hay URL configurada aún, usa datos de ejemplo
+  if (APPS_SCRIPT_URL === "PEGAR_URL_DEL_WEB_APP_ACÁ") {
+    allProducts = [
+      { CATEGORIA:"Snacks",  NOMBRE:"Alfajor",               PRECIO_ARS:850,  LINK_MP:"" },
+      { CATEGORIA:"Helados", NOMBRE:"Tableta helado Alfredo", PRECIO_ARS:1200, LINK_MP:"" },
+      { CATEGORIA:"Snacks",  NOMBRE:"Papas pequeñas",         PRECIO_ARS:700,  LINK_MP:"" },
+      { CATEGORIA:"Bebidas", NOMBRE:"Coca-Cola",              PRECIO_ARS:900,  LINK_MP:"" },
+      { CATEGORIA:"Bebidas", NOMBRE:"Sprite",                 PRECIO_ARS:900,  LINK_MP:"" },
+      { CATEGORIA:"Bebidas", NOMBRE:"Cerveza",                PRECIO_ARS:1400, LINK_MP:"" },
+    ];
+    render();
+    return;
+  }
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL);
+    const data = await res.json();
+    allProducts = data.productos || [];
+    const now = new Date();
+    document.getElementById("last-updated").textContent =
+      "Actualizado " + now.toLocaleTimeString("es-AR", {hour:"2-digit", minute:"2-digit"});
+    render();
+  } catch(e) {
+    document.getElementById("menu-body").innerHTML =
+      `<div class="status-msg">No se pudo cargar el menú. Intentá de nuevo.</div>`;
+  }
+}
+
+function render() {
+  const cats = [...new Set(allProducts.map(p => p.CATEGORIA))];
+
+  // filter bar
+  const bar = document.getElementById("filter-bar");
+  bar.innerHTML = "";
+  ["Todas", ...cats].forEach(c => {
+    const b = document.createElement("button");
+    b.className = "pill" + (c === active ? " active" : "");
+    b.textContent = c;
+    b.onclick = () => { active = c; render(); };
+    bar.appendChild(b);
+  });
+
+  // menu
+  const body = document.getElementById("menu-body");
+  body.innerHTML = "";
+  const groups = active === "Todas" ? cats : [active];
+
+  groups.forEach(cat => {
+    const items = allProducts.filter(p => p.CATEGORIA === cat);
+    if (!items.length) return;
+
+    const sec = document.createElement("div");
+    sec.className = "cat-block";
+    sec.innerHTML = `<div class="cat-label">${cat}</div>`;
+
+    items.forEach(p => {
+      const hasLink = p.LINK_MP && p.LINK_MP.trim() !== "";
+      const el = document.createElement(hasLink ? "a" : "div");
+      el.className = "item" + (hasLink ? "" : " disabled");
+      if (hasLink) { el.href = p.LINK_MP; el.target = "_blank"; el.rel = "noopener"; }
+
+      el.innerHTML = `
+        <div>
+          <div class="item-name">${p.NOMBRE}</div>
+          <div class="item-sub">
+            ${p.CATEGORIA}
+            ${!hasLink ? '<span class="soon-tag">Próximamente</span>' : ""}
+          </div>
+        </div>
+        <div class="item-right">
+          <span class="item-price">${fmt(p.PRECIO_ARS)}</span>
+          ${hasLink ? '<div class="item-chevron">→</div>' : ""}
+        </div>
+      `;
+      sec.appendChild(el);
+    });
+
+    body.appendChild(sec);
+  });
+}
+
+loadMenu();
+// Auto-refresh cada 5 minutos
+setInterval(loadMenu, 5 * 60 * 1000);
+</script>
+</body>
+</html>
