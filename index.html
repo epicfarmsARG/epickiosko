@@ -3,169 +3,329 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Epic Farms · Núñez</title>
+<title>Epic Farms · Kiosco Núñez</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --green:      #0F3B2E;
-    --green-dark: #0A2C22;
-    --green-faded:#5A6F62;
-    --cream:      #EEE7D6;
-    --cream-warm: #E8DFC9;
-    --terra:      #B8602B;
-    --rule:       rgba(15,59,46,0.18);
+    --green:   #0F3B2E;
+    --cream:   #F5F0E8;
+    --cream2:  #EDE7D9;
+    --terra:   #C8602A;
+    --rule:    rgba(15,59,46,0.15);
+    --shadow:  0 2px 12px rgba(15,59,46,0.10);
   }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html { -webkit-text-size-adjust: 100%; }
   body {
-    min-height: 100vh;
-    background: var(--cream);
-    font-family: 'Inter', sans-serif;
-    color: var(--green);
-    -webkit-font-smoothing: antialiased;
-    display: flex; flex-direction: column; align-items: center;
-    padding: 48px 24px 56px;
-  }
-  /* Trama */
-  body::before {
-    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-    background-image:
-      repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(15,59,46,0.025) 10px, rgba(15,59,46,0.025) 11px),
-      repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(15,59,46,0.018) 10px, rgba(15,59,46,0.018) 11px);
+    background: var(--cream); color: var(--green);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh; -webkit-font-smoothing: antialiased;
   }
 
-  .container {
-    position: relative; z-index: 1;
-    width: 100%; max-width: 420px;
-    display: flex; flex-direction: column; align-items: center; gap: 0;
+  /* HEADER */
+  .header {
+    background: var(--green); color: var(--cream);
+    padding: 18px 20px 14px;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
   }
+  .header-brand { display: flex; flex-direction: column; gap: 1px; }
+  .header-logo {
+    font-family: 'DM Sans', sans-serif; font-weight: 700;
+    font-size: 26px; letter-spacing: -0.02em; line-height: 1;
+    color: var(--cream);
+  }
+  .header-logo .reg { font-size: 0.45em; vertical-align: super; }
+  .header-sub { font-size: 10px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(238,231,214,0.6); }
+  .header-right { text-align: right; }
+  .header-sede { font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--terra); }
+  .header-tagline { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 15px; color: rgba(238,231,214,0.75); }
 
-  /* ── LOGO / BRANDING ── */
-  .brand { text-align: center; margin-bottom: 10px; }
-  .brand-logo {
-    font-family: 'Inter', sans-serif; font-weight: 800;
-    font-size: clamp(42px, 11vw, 52px); line-height: 0.88;
-    color: var(--green); letter-spacing: -0.03em;
+  /* CART BAR */
+  .cart-bar {
+    background: var(--terra); color: white;
+    padding: 11px 20px;
+    display: none; align-items: center; justify-content: space-between;
+    position: sticky; top: 68px; z-index: 99;
+    cursor: pointer;
   }
-  .brand-logo .reg { font-size: 0.3em; vertical-align: super; font-weight: 700; }
-  .brand-co {
-    font-size: 11px; font-weight: 600; letter-spacing: 0.38em;
-    color: var(--terra); text-transform: uppercase; margin-top: 8px;
-  }
-  .brand-sede {
-    display: inline-flex; align-items: center; gap: 7px; margin-top: 12px;
-    font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--green-faded);
-    background: var(--cream-warm); border: 1px solid var(--rule);
-    padding: 6px 14px; border-radius: 999px;
-  }
-  .brand-sede .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--terra); }
+  .cart-bar.show { display: flex; }
+  .cart-bar-label { font-size: 13px; font-weight: 600; }
+  .cart-bar-total { font-family: 'DM Serif Display', serif; font-size: 20px; }
+  .cart-bar-cta { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.9; }
 
-  /* ── DIVIDER ── */
-  .divider {
-    width: 100%; height: 1.5px;
-    background: linear-gradient(90deg, transparent, var(--green) 30%, var(--green) 70%, transparent);
-    margin: 28px 0 32px;
-  }
+  /* MAIN */
+  .main { padding: 20px 16px 120px; max-width: 520px; margin: 0 auto; }
 
-  /* ── LINKS ── */
-  .links { width: 100%; display: flex; flex-direction: column; gap: 14px; }
+  /* CATEGORY */
+  .category { margin-bottom: 28px; }
+  .category-title {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--terra); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .category-title::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
 
-  .link-card {
-    display: flex; align-items: center; gap: 16px;
-    background: var(--cream-warm);
-    border: 1.5px solid var(--rule);
-    border-left: 4px solid var(--terra);
-    border-radius: 14px;
-    padding: 18px 20px;
-    text-decoration: none; color: inherit;
-    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-    -webkit-tap-highlight-color: transparent;
+  /* PRODUCT CARD */
+  .product-card {
+    background: white; border: 1.5px solid var(--rule); border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 14px;
+    box-shadow: var(--shadow);
   }
-  .link-card:active {
-    transform: scale(0.98);
-    box-shadow: 0 2px 10px rgba(15,59,46,0.12);
-  }
-  .link-icon {
-    width: 44px; height: 44px; border-radius: 10px;
-    background: var(--green); flex-shrink: 0;
+  .product-emoji { font-size: 28px; flex-shrink: 0; width: 44px; text-align: center; }
+  .product-info { flex: 1; min-width: 0; }
+  .product-name { font-weight: 700; font-size: 15px; color: var(--green); line-height: 1.2; }
+  .product-desc { font-size: 12px; color: #888; margin-top: 2px; }
+  .product-price { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--terra); flex-shrink: 0; }
+  .product-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .btn-qty {
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 1.5px solid var(--green); background: transparent; color: var(--green);
+    font-size: 18px; font-weight: 700; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    font-size: 20px;
+    transition: all 0.15s;
   }
-  .link-text { flex: 1; }
-  .link-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px; font-weight: 700; color: var(--green); line-height: 1.1;
-  }
-  .link-desc {
-    font-size: 11px; font-weight: 500; color: var(--green-faded);
-    letter-spacing: 0.02em; margin-top: 3px; line-height: 1.4;
-  }
-  .link-arrow {
-    font-size: 18px; color: var(--terra); flex-shrink: 0;
-    font-weight: 700; opacity: 0.7;
-  }
+  .btn-qty:active { background: var(--green); color: white; }
+  .qty-display { font-weight: 700; font-size: 16px; min-width: 20px; text-align: center; }
 
-  /* ── TAGLINE ── */
-  .tagline {
-    margin-top: 40px; text-align: center;
-    font-family: 'Cormorant Garamond', serif; font-style: italic;
-    font-size: 20px; font-weight: 600; color: var(--terra); opacity: 0.75;
+  /* ESTADO */
+  .loading, .error-msg {
+    text-align: center; padding: 60px 20px;
+    font-size: 14px; color: #999;
   }
-  .footer-text {
-    margin-top: 8px; font-size: 10px; font-weight: 600;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--green-faded); text-align: center;
+  .error-msg { color: var(--terra); }
+
+  /* CART MODAL */
+  .cart-overlay {
+    position: fixed; inset: 0; background: rgba(15,59,46,0.85);
+    z-index: 200; display: none; align-items: flex-end;
+  }
+  .cart-overlay.open { display: flex; }
+  .cart-sheet {
+    background: var(--cream); width: 100%; max-width: 520px; margin: 0 auto;
+    border-radius: 20px 20px 0 0; padding: 24px 20px 40px;
+    max-height: 85vh; overflow-y: auto;
+  }
+  .cart-handle { width: 36px; height: 4px; background: var(--rule); border-radius: 2px; margin: 0 auto 20px; }
+  .cart-title { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--green); margin-bottom: 16px; }
+  .cart-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0; border-bottom: 1px solid var(--rule); gap: 12px;
+  }
+  .cart-item:last-of-type { border-bottom: none; }
+  .cart-item-name { font-weight: 600; font-size: 14px; flex: 1; }
+  .cart-item-qty { color: #999; font-size: 13px; }
+  .cart-item-price { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--terra); }
+  .cart-total-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 16px 0 20px; border-top: 2px solid var(--green); margin-top: 8px;
+  }
+  .cart-total-label { font-weight: 700; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .cart-total-amount { font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--terra); }
+  .cart-actions { display: flex; flex-direction: column; gap: 10px; }
+  .btn-pay {
+    padding: 16px; border-radius: 12px; border: none; font-size: 15px; font-weight: 700;
+    cursor: pointer; letter-spacing: 0.05em; text-transform: uppercase;
+    transition: opacity 0.15s;
+  }
+  .btn-pay:active { opacity: 0.85; }
+  .btn-mp { background: var(--green); color: white; }
+  .btn-cash { background: white; color: var(--green); border: 2px solid var(--green); }
+  .btn-close-cart {
+    background: transparent; border: none; color: var(--terra);
+    font-size: 13px; font-weight: 600; cursor: pointer; padding: 8px; text-align: center;
+    margin-top: 4px;
   }
 </style>
 </head>
 <body>
-<div class="container">
 
-  <div class="brand">
-    <div class="brand-logo">epic farms<span class="reg">®</span></div>
-    <div class="brand-co">Cannabis Co.</div>
-    <div class="brand-sede"><span class="dot"></span> Núñez</div>
+<div class="header">
+  <div class="header-brand">
+    <div class="header-logo">epic farms<span class="reg">®</span></div>
+    <div class="header-sub">Kiosco · Solo socios</div>
   </div>
-
-  <div class="divider"></div>
-
-  <div class="links">
-
-    <a class="link-card" href="https://epicfarmsarg.github.io/epicfarms-nunez/" target="_blank">
-      <div class="link-icon">🌿</div>
-      <div class="link-text">
-        <div class="link-title">Hacerme socio</div>
-        <div class="link-desc">Formulario de ingreso · Sede Núñez</div>
-      </div>
-      <div class="link-arrow">›</div>
-    </a>
-
-    <a class="link-card" href="https://epicfarmsarg.github.io/epicfarms-menu/" target="_blank">
-      <div class="link-icon">📋</div>
-      <div class="link-text">
-        <div class="link-title">Ver el menú</div>
-        <div class="link-desc">Flores · Productos Epic · Precios actualizados</div>
-      </div>
-      <div class="link-arrow">›</div>
-    </a>
-
-    <a class="link-card" href="https://epicfarmsarg.github.io/epickiosko/" target="_blank">
-      <div class="link-icon">💳</div>
-      <div class="link-text">
-        <div class="link-title">Kiosco · Mi saldo</div>
-        <div class="link-desc">Consultá y cargá tu billetera Epic</div>
-      </div>
-      <div class="link-arrow">›</div>
-    </a>
-
+  <div class="header-right">
+    <div class="header-sede">Núñez</div>
+    <div class="header-tagline">Ease of mind</div>
   </div>
-
-  <div class="tagline">Ease of mind</div>
-  <div class="footer-text">Solo socios · Epic Farms® Cannabis Co.</div>
-
 </div>
+
+<div class="cart-bar" id="cartBar" onclick="openCart()">
+  <div class="cart-bar-label" id="cartBarLabel">🛒 3 productos</div>
+  <div class="cart-bar-total" id="cartBarTotal">$ 1.200</div>
+  <div class="cart-bar-cta">Ver pedido ›</div>
+</div>
+
+<div class="main" id="main">
+  <div class="loading">Cargando el menú…</div>
+</div>
+
+<!-- CART MODAL -->
+<div class="cart-overlay" id="cartOverlay" onclick="handleOverlayClick(event)">
+  <div class="cart-sheet" id="cartSheet">
+    <div class="cart-handle"></div>
+    <div class="cart-title">Tu pedido</div>
+    <div id="cartItems"></div>
+    <div class="cart-total-row">
+      <div class="cart-total-label">Total</div>
+      <div class="cart-total-amount" id="cartTotalAmount">$ 0</div>
+    </div>
+    <div class="cart-actions">
+      <button class="btn-pay btn-mp" onclick="pagarMP()">💳 Pagar con Mercado Pago</button>
+      <button class="btn-pay btn-cash" onclick="pagarEfectivo()">💵 Pagar en efectivo</button>
+      <button class="btn-close-cart" onclick="closeCart()">Seguir agregando</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKDGa2b0ZORXwUuZRWq1LTLZKQybL3nh4Dh0O24S0EcJxJdHUurgCC0sgZNMvBNh0Y/exec";
+const WHATSAPP_NUMBER = "5491100000000"; // actualizar con el número real
+const MP_LINK_GENERICO = "https://mpago.la/"; // actualizar con link real
+
+let productos = [];
+let cart = {};
+
+// Cargar menú desde Apps Script
+async function loadMenu() {
+  try {
+    const res = await fetch(APPS_SCRIPT_URL + "?action=getMenu");
+    const data = await res.json();
+    if (data.ok && data.items) {
+      productos = data.items.filter(p => p.activo === "SI" || p.activo === true);
+      renderMenu();
+    } else {
+      showError("No se pudo cargar el menú.");
+    }
+  } catch(e) {
+    showError("Sin conexión. Reintentá en unos segundos.");
+  }
+}
+
+function showError(msg) {
+  document.getElementById('main').innerHTML = `<div class="error-msg">${msg}</div>`;
+}
+
+function renderMenu() {
+  const main = document.getElementById('main');
+  // Agrupar por categoría
+  const cats = {};
+  productos.forEach(p => {
+    const cat = p.categoria || "Otros";
+    if (!cats[cat]) cats[cat] = [];
+    cats[cat].push(p);
+  });
+
+  let html = '';
+  for (const cat in cats) {
+    html += `<div class="category"><div class="category-title">${cat}</div>`;
+    cats[cat].forEach(p => {
+      const qty = cart[p.id] ? cart[p.id].qty : 0;
+      html += `
+        <div class="product-card">
+          <div class="product-emoji">${p.emoji || '🛒'}</div>
+          <div class="product-info">
+            <div class="product-name">${p.nombre}</div>
+            ${p.descripcion ? `<div class="product-desc">${p.descripcion}</div>` : ''}
+          </div>
+          <div class="product-price">$${Number(p.precio).toLocaleString('es-AR')}</div>
+          <div class="product-actions">
+            <button class="btn-qty" onclick="changeQty('${p.id}', -1)">−</button>
+            <div class="qty-display" id="qty-${p.id}">${qty}</div>
+            <button class="btn-qty" onclick="changeQty('${p.id}', 1, ${JSON.stringify(p).replace(/"/g,'&quot;')})">+</button>
+          </div>
+        </div>`;
+    });
+    html += '</div>';
+  }
+  main.innerHTML = html || '<div class="loading">No hay productos disponibles.</div>';
+  updateCartBar();
+}
+
+function changeQty(id, delta, prod) {
+  if (!cart[id]) {
+    if (!prod) return;
+    cart[id] = { qty: 0, ...prod };
+  }
+  cart[id].qty = Math.max(0, cart[id].qty + delta);
+  if (cart[id].qty === 0) delete cart[id];
+  const el = document.getElementById('qty-' + id);
+  if (el) el.textContent = cart[id] ? cart[id].qty : 0;
+  updateCartBar();
+}
+
+function getCartTotal() {
+  return Object.values(cart).reduce((s, p) => s + p.qty * p.precio, 0);
+}
+function getCartCount() {
+  return Object.values(cart).reduce((s, p) => s + p.qty, 0);
+}
+
+function updateCartBar() {
+  const count = getCartCount();
+  const total = getCartTotal();
+  const bar = document.getElementById('cartBar');
+  if (count > 0) {
+    bar.classList.add('show');
+    document.getElementById('cartBarLabel').textContent = `🛒 ${count} producto${count !== 1 ? 's' : ''}`;
+    document.getElementById('cartBarTotal').textContent = `$${total.toLocaleString('es-AR')}`;
+  } else {
+    bar.classList.remove('show');
+  }
+}
+
+function openCart() {
+  const items = Object.values(cart);
+  let html = '';
+  items.forEach(p => {
+    html += `<div class="cart-item">
+      <div class="cart-item-name">${p.nombre}</div>
+      <div class="cart-item-qty">× ${p.qty}</div>
+      <div class="cart-item-price">$${(p.qty * p.precio).toLocaleString('es-AR')}</div>
+    </div>`;
+  });
+  document.getElementById('cartItems').innerHTML = html;
+  document.getElementById('cartTotalAmount').textContent = `$${getCartTotal().toLocaleString('es-AR')}`;
+  document.getElementById('cartOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('cartOverlay')) closeCart();
+}
+
+function getOrderText() {
+  const items = Object.values(cart).map(p => `• ${p.nombre} x${p.qty} = $${(p.qty * p.precio).toLocaleString('es-AR')}`).join('\n');
+  return `Pedido Epic Farms Núñez:\n${items}\n\nTotal: $${getCartTotal().toLocaleString('es-AR')}`;
+}
+
+function pagarMP() {
+  closeCart();
+  window.open(MP_LINK_GENERICO, '_blank');
+}
+
+function pagarEfectivo() {
+  const msg = encodeURIComponent(getOrderText());
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+  closeCart();
+  cart = {};
+  renderMenu();
+}
+
+// Iniciar
+loadMenu();
+// Refrescar cada 5 min
+setInterval(loadMenu, 5 * 60 * 1000);
+</script>
 </body>
 </html>
