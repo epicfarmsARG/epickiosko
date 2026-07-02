@@ -2,481 +2,170 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Epic Kiosko · Núñez</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Epic Farms · Núñez</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg:      #F7F4EE;
-  --surface: #FFFFFF;
-  --green:   #0F3B2E;
-  --green-l: #e8f0ec;
-  --terra:   #C8602A;
-  --terra-l: rgba(200,96,42,.08);
-  --text:    #111a15;
-  --sub:     #7a8c82;
-  --line:    #e2ddd6;
-}
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-  padding-bottom: 160px;
-}
-.page { max-width: 600px; margin: 0 auto; padding: 0 20px; }
+  :root {
+    --green:      #0F3B2E;
+    --green-dark: #0A2C22;
+    --green-faded:#5A6F62;
+    --cream:      #EEE7D6;
+    --cream-warm: #E8DFC9;
+    --terra:      #B8602B;
+    --rule:       rgba(15,59,46,0.18);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    min-height: 100vh;
+    background: var(--cream);
+    font-family: 'Inter', sans-serif;
+    color: var(--green);
+    -webkit-font-smoothing: antialiased;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 48px 24px 56px;
+  }
+  /* Trama */
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(15,59,46,0.025) 10px, rgba(15,59,46,0.025) 11px),
+      repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(15,59,46,0.018) 10px, rgba(15,59,46,0.018) 11px);
+  }
 
-/* ── HEADER ── */
-header {
-  padding: 40px 0 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  border-bottom: 1.5px solid var(--green);
-  margin-bottom: 28px;
-}
-.eyebrow { font-size: 10px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--sub); margin-bottom: 8px; }
-.wordmark { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 9vw, 54px); color: var(--green); line-height: .92; letter-spacing: -.02em; }
-.wordmark em { font-style: italic; color: var(--terra); }
-.submark { font-size: 10px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--sub); margin-top: 10px; }
-.sede-right { text-align: right; padding-bottom: 4px; }
-.sede-label { font-size: 9px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--sub); display: block; margin-bottom: 4px; }
-.sede-val { font-family: 'DM Serif Display', serif; font-style: italic; font-size: clamp(24px, 6vw, 36px); color: var(--terra); line-height: 1; }
+  .container {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 420px;
+    display: flex; flex-direction: column; align-items: center; gap: 0;
+  }
 
-/* ── FILTER ── */
-.filter-bar { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
-.pill { appearance: none; background: var(--surface); border: 1.5px solid var(--line); color: var(--sub); font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: .06em; padding: 6px 14px; border-radius: 100px; cursor: pointer; transition: all .15s; }
-.pill:hover { border-color: var(--green); color: var(--green); }
-.pill.active { background: var(--green); border-color: var(--green); color: #fff; font-weight: 600; }
+  /* ── LOGO / BRANDING ── */
+  .brand { text-align: center; margin-bottom: 10px; }
+  .brand-logo {
+    font-family: 'Inter', sans-serif; font-weight: 800;
+    font-size: clamp(42px, 11vw, 52px); line-height: 0.88;
+    color: var(--green); letter-spacing: -0.03em;
+  }
+  .brand-logo .reg { font-size: 0.3em; vertical-align: super; font-weight: 700; }
+  .brand-co {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.38em;
+    color: var(--terra); text-transform: uppercase; margin-top: 8px;
+  }
+  .brand-sede {
+    display: inline-flex; align-items: center; gap: 7px; margin-top: 12px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--green-faded);
+    background: var(--cream-warm); border: 1px solid var(--rule);
+    padding: 6px 14px; border-radius: 999px;
+  }
+  .brand-sede .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--terra); }
 
-/* ── CATEGORY ── */
-.cat-block { margin-bottom: 36px; }
-.cat-label { font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--terra); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-.cat-label::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%; height: 1.5px;
+    background: linear-gradient(90deg, transparent, var(--green) 30%, var(--green) 70%, transparent);
+    margin: 28px 0 32px;
+  }
 
-/* ── ITEM ── */
-.item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 14px 16px;
-  background: var(--surface);
-  border-radius: 12px;
-  margin-bottom: 8px;
-  border: 1.5px solid transparent;
-  transition: border-color .15s, box-shadow .15s;
-}
-.item.in-cart { border-color: var(--terra); background: #fffaf7; }
-.item-info { flex: 1; min-width: 0; }
-.item-name { font-family: 'DM Serif Display', serif; font-size: clamp(16px, 3.5vw, 19px); color: var(--text); line-height: 1.2; }
-.item-cat { font-size: 11px; color: var(--sub); margin-top: 2px; }
-.item-price-tag { font-family: 'DM Serif Display', serif; font-size: clamp(17px, 3.5vw, 20px); color: var(--terra); white-space: nowrap; flex-shrink: 0; }
+  /* ── LINKS ── */
+  .links { width: 100%; display: flex; flex-direction: column; gap: 14px; }
 
-/* ── QTY CONTROL ── */
-.qty-control {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-}
-.qty-btn {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1.5px solid var(--line);
-  background: var(--bg);
-  color: var(--green);
-  font-size: 18px;
-  line-height: 1;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all .15s;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 300;
-}
-.qty-btn:hover { background: var(--green); border-color: var(--green); color: #fff; }
-.qty-btn.add { border-color: var(--terra); color: var(--terra); }
-.qty-btn.add:hover { background: var(--terra); border-color: var(--terra); color: #fff; }
-.qty-num { font-size: 15px; font-weight: 700; color: var(--text); min-width: 16px; text-align: center; }
+  .link-card {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--cream-warm);
+    border: 1.5px solid var(--rule);
+    border-left: 4px solid var(--terra);
+    border-radius: 14px;
+    padding: 18px 20px;
+    text-decoration: none; color: inherit;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .link-card:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 10px rgba(15,59,46,0.12);
+  }
+  .link-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: var(--green); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .link-text { flex: 1; }
+  .link-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 700; color: var(--green); line-height: 1.1;
+  }
+  .link-desc {
+    font-size: 11px; font-weight: 500; color: var(--green-faded);
+    letter-spacing: 0.02em; margin-top: 3px; line-height: 1.4;
+  }
+  .link-arrow {
+    font-size: 18px; color: var(--terra); flex-shrink: 0;
+    font-weight: 700; opacity: 0.7;
+  }
 
-/* ── SOON TAG ── */
-.soon-tag { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--terra); background: rgba(200,96,42,.1); padding: 2px 7px; border-radius: 4px; display: inline-block; margin-top: 4px; }
-
-/* ── STATUS ── */
-.status-msg { text-align: center; padding: 48px 0; color: var(--sub); font-size: 14px; }
-.dot { display: inline-block; animation: pulse 1.2s ease-in-out infinite; }
-.dot:nth-child(2) { animation-delay: .2s; }
-.dot:nth-child(3) { animation-delay: .4s; }
-@keyframes pulse { 0%,80%,100%{opacity:.2}40%{opacity:1} }
-
-/* ── CART DRAWER ── */
-.cart-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  padding: 0 20px 20px;
-  background: linear-gradient(to top, var(--bg) 80%, transparent);
-  pointer-events: none;
-}
-.cart-bar.has-items { pointer-events: all; }
-
-.cart-summary {
-  max-width: 600px;
-  margin: 0 auto;
-  background: var(--green);
-  border-radius: 16px;
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  box-shadow: 0 8px 32px rgba(15,59,46,.25);
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity .2s, transform .2s;
-}
-.cart-bar.has-items .cart-summary { opacity: 1; transform: translateY(0); }
-
-.cart-info {}
-.cart-count { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.6); }
-.cart-total { font-family: 'DM Serif Display', serif; font-size: 24px; color: #fff; letter-spacing: -.01em; margin-top: 2px; }
-
-.cart-actions { display: flex; gap: 10px; flex-shrink: 0; }
-
-.btn-pay {
-  appearance: none;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 18px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity .15s, transform .1s;
-  white-space: nowrap;
-}
-.btn-pay:active { transform: scale(.97); }
-.btn-mp { background: var(--terra); color: #fff; }
-.btn-mp:hover { opacity: .9; }
-.btn-cash { background: rgba(255,255,255,.15); color: #fff; border: 1.5px solid rgba(255,255,255,.25); }
-.btn-cash:hover { background: rgba(255,255,255,.25); }
-
-/* ── CART MODAL ── */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.45);
-  z-index: 200;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .2s;
-}
-.modal-overlay.open { opacity: 1; pointer-events: all; }
-
-.modal {
-  background: var(--surface);
-  border-radius: 20px 20px 0 0;
-  width: 100%;
-  max-width: 600px;
-  padding: 28px 24px 40px;
-  transform: translateY(100%);
-  transition: transform .25s ease;
-  max-height: 85vh;
-  overflow-y: auto;
-}
-.modal-overlay.open .modal { transform: translateY(0); }
-
-.modal-title { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--text); margin-bottom: 20px; }
-.modal-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
-.modal-item-name { font-weight: 500; }
-.modal-item-qty { color: var(--sub); font-size: 13px; margin-top: 2px; }
-.modal-item-subtotal { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--terra); }
-.modal-total-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0 20px; }
-.modal-total-label { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--sub); }
-.modal-total-val { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--green); }
-
-.modal-btns { display: flex; flex-direction: column; gap: 10px; }
-.btn-full { width: 100%; padding: 15px; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; border: none; transition: opacity .15s; }
-.btn-full:active { opacity: .85; }
-.btn-full.mp { background: var(--terra); color: #fff; }
-.btn-full.cash { background: var(--green); color: #fff; }
-.btn-full.cancel { background: transparent; color: var(--sub); font-size: 13px; padding: 10px; }
-
-/* last updated */
-.last-updated { font-size: 10px; color: var(--sub); opacity: .45; margin-bottom: 20px; letter-spacing: .04em; }
-
-footer { margin-top: 32px; padding: 20px 0; border-top: 1px solid var(--line); display: flex; justify-content: space-between; }
-.footer-t { font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--sub); opacity: .6; }
-
-@media (max-width: 420px) {
-  .page { padding: 0 16px; }
-  .btn-pay { font-size: 12px; padding: 9px 13px; }
-  .cart-total { font-size: 20px; }
-}
+  /* ── TAGLINE ── */
+  .tagline {
+    margin-top: 40px; text-align: center;
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 20px; font-weight: 600; color: var(--terra); opacity: 0.75;
+  }
+  .footer-text {
+    margin-top: 8px; font-size: 10px; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--green-faded); text-align: center;
+  }
 </style>
 </head>
 <body>
-<div class="page">
-  <header>
-    <div>
-      <div class="eyebrow">Cannabis Co. · Est. 2023</div>
-      <div class="wordmark">epic <em>farms</em><sup style="font-size:.28em;vertical-align:super;font-style:normal;color:var(--sub)">®</sup></div>
-      <div class="submark">Menú · Solo socios</div>
-    </div>
-    <div class="sede-right">
-      <span class="sede-label">Sede</span>
-      <span class="sede-val">Núñez</span>
-    </div>
-  </header>
+<div class="container">
 
-  <div class="filter-bar" id="filter-bar"></div>
-  <div id="last-updated" class="last-updated"></div>
-  <div id="menu-body"></div>
-
-  <footer>
-    <span class="footer-t">Epic Farms®</span>
-    <span class="footer-t">Solo socios</span>
-  </footer>
-</div>
-
-<!-- CART BAR -->
-<div class="cart-bar" id="cart-bar">
-  <div class="cart-summary">
-    <div class="cart-info">
-      <div class="cart-count" id="cart-count">0 productos</div>
-      <div class="cart-total" id="cart-total">$ 0</div>
-    </div>
-    <div class="cart-actions">
-      <button class="btn-pay btn-cash" onclick="openModal('cash')">💵 Efectivo</button>
-      <button class="btn-pay btn-mp" onclick="openModal('mp')">💳 MP</button>
-    </div>
+  <div class="brand">
+    <div class="brand-logo">epic farms<span class="reg">®</span></div>
+    <div class="brand-co">Cannabis Co.</div>
+    <div class="brand-sede"><span class="dot"></span> Núñez</div>
   </div>
-</div>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
-  <div class="modal" id="modal">
-    <div class="modal-title" id="modal-title">Tu pedido</div>
-    <div id="modal-items"></div>
-    <div class="modal-total-row">
-      <span class="modal-total-label">Total</span>
-      <span class="modal-total-val" id="modal-total-val">$ 0</span>
-    </div>
-    <div class="modal-btns" id="modal-btns"></div>
-  </div>
-</div>
+  <div class="divider"></div>
 
-<script>
-// ════════════════════════════════════════════════
-//  CONFIGURACIÓN
-// ════════════════════════════════════════════════
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKDGa2b0ZORXwUuZRWq1LTLZKQybL3nh4Dh0O24S0EcJxJdHUurgCC0sgZNMvBNh0Y/exec";
-const WHATSAPP_NUMBER = "5491124836673"; // ← reemplazar con el número del local (sin + ni espacios)
-const MP_LINK_GENERICO = "";             // ← pegar link de MP cuando esté disponible
-// ════════════════════════════════════════════════
+  <div class="links">
 
-const fmt = n => "$ " + Number(n).toLocaleString("es-AR");
-let allProducts = [];
-let cart = {}; // { id: qty }
-let active = "Todas";
-let modalMode = null;
-
-// ── CARGA DESDE GOOGLE SHEETS ──────────────────
-async function loadMenu() {
-  document.getElementById("menu-body").innerHTML =
-    `<div class="status-msg">Cargando<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></div>`;
-  try {
-    const res = await fetch(APPS_SCRIPT_URL);
-    const data = await res.json();
-    allProducts = data.productos || [];
-    const now = new Date();
-    document.getElementById("last-updated").textContent =
-      "Actualizado " + now.toLocaleTimeString("es-AR", {hour:"2-digit", minute:"2-digit"});
-  } catch(e) {
-    // fallback a datos de ejemplo si falla la red
-    allProducts = [
-      {ID:1,CATEGORIA:"Snacks",  NOMBRE:"Alfajor",               PRECIO_ARS:850,  LINK_MP:""},
-      {ID:2,CATEGORIA:"Helados", NOMBRE:"Tableta helado Alfredo", PRECIO_ARS:1200, LINK_MP:""},
-      {ID:3,CATEGORIA:"Snacks",  NOMBRE:"Papas pequeñas",         PRECIO_ARS:700,  LINK_MP:""},
-      {ID:4,CATEGORIA:"Bebidas", NOMBRE:"Coca-Cola",              PRECIO_ARS:900,  LINK_MP:""},
-      {ID:5,CATEGORIA:"Bebidas", NOMBRE:"Sprite",                 PRECIO_ARS:900,  LINK_MP:""},
-      {ID:6,CATEGORIA:"Bebidas", NOMBRE:"Cerveza",                PRECIO_ARS:1400, LINK_MP:""},
-    ];
-  }
-  render();
-}
-
-// ── RENDER ─────────────────────────────────────
-function render() {
-  const cats = [...new Set(allProducts.map(p => p.CATEGORIA))];
-
-  // filter
-  const bar = document.getElementById("filter-bar");
-  bar.innerHTML = "";
-  ["Todas", ...cats].forEach(c => {
-    const b = document.createElement("button");
-    b.className = "pill" + (c === active ? " active" : "");
-    b.textContent = c;
-    b.onclick = () => { active = c; render(); };
-    bar.appendChild(b);
-  });
-
-  // menu
-  const body = document.getElementById("menu-body");
-  body.innerHTML = "";
-  const groups = active === "Todas" ? cats : [active];
-
-  groups.forEach(cat => {
-    const items = allProducts.filter(p => p.CATEGORIA === cat);
-    if (!items.length) return;
-    const sec = document.createElement("div");
-    sec.className = "cat-block";
-    sec.innerHTML = `<div class="cat-label">${cat}</div>`;
-
-    items.forEach(p => {
-      const qty = cart[p.ID] || 0;
-      const div = document.createElement("div");
-      div.className = "item" + (qty > 0 ? " in-cart" : "");
-      div.id = `item-${p.ID}`;
-      div.innerHTML = `
-        <div class="item-info">
-          <div class="item-name">${p.NOMBRE}</div>
-          <div class="item-cat">${p.CATEGORIA}</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:14px;flex-shrink:0">
-          <span class="item-price-tag">${fmt(p.PRECIO_ARS)}</span>
-          <div class="qty-control">
-            ${qty > 0
-              ? `<button class="qty-btn" onclick="changeQty(${p.ID},-1)">−</button>
-                 <span class="qty-num">${qty}</span>`
-              : `<span class="qty-num" style="display:none">0</span>`}
-            <button class="qty-btn add" onclick="changeQty(${p.ID},1)">+</button>
-          </div>
-        </div>`;
-      sec.appendChild(div);
-    });
-    body.appendChild(sec);
-  });
-
-  updateCartBar();
-}
-
-// ── CART LOGIC ─────────────────────────────────
-function changeQty(id, delta) {
-  const current = cart[id] || 0;
-  const next = Math.max(0, current + delta);
-  if (next === 0) delete cart[id]; else cart[id] = next;
-
-  // re-render just that item row
-  const p = allProducts.find(x => x.ID == id);
-  const qty = cart[id] || 0;
-  const div = document.getElementById(`item-${id}`);
-  if (div) {
-    div.className = "item" + (qty > 0 ? " in-cart" : "");
-    const qtyControl = div.querySelector(".qty-control");
-    qtyControl.innerHTML = `
-      ${qty > 0
-        ? `<button class="qty-btn" onclick="changeQty(${id},-1)">−</button>
-           <span class="qty-num">${qty}</span>`
-        : `<span class="qty-num" style="display:none">0</span>`}
-      <button class="qty-btn add" onclick="changeQty(${id},1)">+</button>`;
-  }
-  updateCartBar();
-}
-
-function cartTotal() {
-  return Object.entries(cart).reduce((sum, [id, qty]) => {
-    const p = allProducts.find(x => x.ID == id);
-    return sum + (p ? p.PRECIO_ARS * qty : 0);
-  }, 0);
-}
-
-function cartCount() {
-  return Object.values(cart).reduce((a, b) => a + b, 0);
-}
-
-function cartItems() {
-  return Object.entries(cart)
-    .map(([id, qty]) => ({ p: allProducts.find(x => x.ID == id), qty }))
-    .filter(x => x.p);
-}
-
-function updateCartBar() {
-  const total = cartTotal();
-  const count = cartCount();
-  const bar = document.getElementById("cart-bar");
-  bar.className = "cart-bar" + (count > 0 ? " has-items" : "");
-  document.getElementById("cart-count").textContent =
-    count === 1 ? "1 producto" : `${count} productos`;
-  document.getElementById("cart-total").textContent = fmt(total);
-}
-
-// ── MODAL ──────────────────────────────────────
-function openModal(mode) {
-  modalMode = mode;
-  const items = cartItems();
-  const total = cartTotal();
-
-  document.getElementById("modal-title").textContent =
-    mode === "mp" ? "Pagar con Mercado Pago" : "Pagar en efectivo";
-
-  document.getElementById("modal-items").innerHTML = items.map(({p, qty}) => `
-    <div class="modal-item">
-      <div>
-        <div class="modal-item-name">${p.NOMBRE}</div>
-        <div class="modal-item-qty">${qty} × ${fmt(p.PRECIO_ARS)}</div>
+    <a class="link-card" href="https://epicfarmsarg.github.io/epicfarms-nunez/" target="_blank">
+      <div class="link-icon">🌿</div>
+      <div class="link-text">
+        <div class="link-title">Hacerme socio</div>
+        <div class="link-desc">Formulario de ingreso · Sede Núñez</div>
       </div>
-      <div class="modal-item-subtotal">${fmt(p.PRECIO_ARS * qty)}</div>
-    </div>`).join("");
+      <div class="link-arrow">›</div>
+    </a>
 
-  document.getElementById("modal-total-val").textContent = fmt(total);
+    <a class="link-card" href="https://epicfarmsarg.github.io/epicfarms-menu/" target="_blank">
+      <div class="link-icon">📋</div>
+      <div class="link-text">
+        <div class="link-title">Ver el menú</div>
+        <div class="link-desc">Flores · Productos Epic · Precios actualizados</div>
+      </div>
+      <div class="link-arrow">›</div>
+    </a>
 
-  const btns = document.getElementById("modal-btns");
+    <a class="link-card" href="https://epicfarmsarg.github.io/epickiosko/" target="_blank">
+      <div class="link-icon">💳</div>
+      <div class="link-text">
+        <div class="link-title">Kiosco · Mi saldo</div>
+        <div class="link-desc">Consultá y cargá tu billetera Epic</div>
+      </div>
+      <div class="link-arrow">›</div>
+    </a>
 
-  if (mode === "mp") {
-    const mpLink = MP_LINK_GENERICO;
-    btns.innerHTML = mpLink
-      ? `<a href="${mpLink}" target="_blank" class="btn-full mp">Ir a pagar con MP →</a>`
-      : `<div style="background:#fff3e0;border-radius:10px;padding:14px 16px;font-size:13px;color:#b45309;margin-bottom:8px">
-           💳 El pago con MP estará disponible próximamente.<br>Por ahora pagá en efectivo en el local.
-         </div>`;
-    btns.innerHTML += `<button class="btn-full cancel" onclick="closeModal()">Volver al menú</button>`;
-  } else {
-    // WhatsApp message
-    const lines = items.map(({p, qty}) => `• ${p.NOMBRE} ×${qty} = ${fmt(p.PRECIO_ARS * qty)}`).join("\n");
-    const msg = encodeURIComponent(`Hola! Quiero hacer un pedido en Epic Kiosko Núñez:\n\n${lines}\n\nTotal: ${fmt(total)}`);
-    const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
-    btns.innerHTML = `
-      <a href="${waUrl}" target="_blank" class="btn-full cash">Confirmar pedido por WhatsApp →</a>
-      <button class="btn-full cancel" onclick="closeModal()">Volver al menú</button>`;
-  }
+  </div>
 
-  document.getElementById("modal-overlay").classList.add("open");
-}
+  <div class="tagline">Ease of mind</div>
+  <div class="footer-text">Solo socios · Epic Farms® Cannabis Co.</div>
 
-function closeModal() {
-  document.getElementById("modal-overlay").classList.remove("open");
-}
-
-function closeModalOutside(e) {
-  if (e.target === document.getElementById("modal-overlay")) closeModal();
-}
-
-// ── INIT ───────────────────────────────────────
-loadMenu();
-setInterval(loadMenu, 5 * 60 * 1000);
-</script>
+</div>
 </body>
 </html>
