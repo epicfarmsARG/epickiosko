@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Epic Farms · Mi Saldo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--green:#0F3B2E;--green-faded:#5A6F62;--cream:#EEE7D6;--cream-warm:#E8DFC9;--cream-deep:#D4C9AC;--terra:#B8602B;--rule:rgba(15,59,46,0.16);--rule-str:rgba(15,59,46,0.30);}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html{-webkit-text-size-adjust:100%;}
+  body{background:var(--cream);color:var(--green);font-family:'Inter',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased;}
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(15,59,46,0.025) 10px,rgba(15,59,46,0.025) 11px),repeating-linear-gradient(-45deg,transparent,transparent 10px,rgba(15,59,46,0.018) 10px,rgba(15,59,46,0.018) 11px);}
+  .wrap{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:36px 20px 56px;}
+
+  /* BRAND */
+  .brand{text-align:center;margin-bottom:28px;}
+  .brand-logo{font-family:'Inter',sans-serif;font-weight:900;font-size:40px;line-height:.9;color:var(--green);letter-spacing:-.03em;}
+  .brand-logo .reg{font-size:.32em;vertical-align:super;}
+  .brand-co{font-size:10px;font-weight:700;letter-spacing:.36em;color:var(--terra);text-transform:uppercase;margin-top:6px;}
+  .divider{height:1.5px;background:linear-gradient(90deg,transparent,var(--green) 30%,var(--green) 70%,transparent);margin:20px 0 24px;}
+
+  /* SEARCH */
+  .search-card{background:var(--cream-warm);border:1.5px solid var(--rule-str);border-radius:16px;padding:24px 20px;}
+  .search-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;margin-bottom:4px;}
+  .search-sub{font-size:12px;color:var(--green-faded);margin-bottom:16px;}
+  .search-input{width:100%;font-family:'Inter',sans-serif;font-size:16px;color:var(--green);background:var(--cream);border:1.5px solid var(--rule-str);border-radius:10px;padding:12px 14px;outline:none;transition:border-color .2s;}
+  .search-input:focus{border-color:var(--terra);}
+  .search-btn{width:100%;margin-top:10px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--cream);background:var(--green);border:none;border-radius:10px;padding:14px;cursor:pointer;-webkit-appearance:none;}
+  .search-btn:active{opacity:.85;}
+  .search-btn:disabled{opacity:.5;}
+
+  /* SALDO CARD */
+  .saldo-card{background:var(--green);border-radius:16px;padding:28px 24px;margin:20px 0;color:var(--cream);}
+  .saldo-nombre{font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;opacity:.7;margin-bottom:4px;}
+  .saldo-amount{font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:700;line-height:1;color:var(--cream);}
+  .saldo-label{font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:.6;margin-top:4px;}
+  .saldo-sede{margin-top:16px;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--terra);}
+
+  /* MOVIMIENTOS */
+  .mov-section{margin-top:8px;}
+  .mov-title{font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--terra);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .mov-title::after{content:'';flex:1;height:1px;background:var(--rule-str);}
+  .mov-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--rule);gap:12px;}
+  .mov-row:last-child{border-bottom:none;}
+  .mov-info{flex:1;}
+  .mov-desc{font-size:14px;font-weight:600;color:var(--green);line-height:1.2;}
+  .mov-fecha{font-size:11px;color:var(--green-faded);margin-top:2px;}
+  .mov-monto{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;}
+  .mov-monto.gasto{color:var(--terra);}
+  .mov-monto.carga{color:#2D7A4F;}
+
+  /* MÚLTIPLES RESULTADOS */
+  .multi-card{background:var(--cream-warm);border:1.5px solid var(--rule-str);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
+  .multi-card:active{opacity:.85;}
+  .multi-nombre{font-weight:700;font-size:15px;}
+  .multi-sub{font-size:12px;color:var(--green-faded);margin-top:2px;}
+  .multi-arrow{color:var(--terra);font-size:18px;font-weight:700;}
+
+  /* ESTADOS */
+  .msg{text-align:center;padding:20px;font-size:13px;}
+  .msg.error{color:var(--terra);}
+  .spinner{display:inline-block;width:16px;height:16px;border:2.5px solid var(--rule-str);border-top-color:var(--terra);border-radius:50%;animation:spin .7s linear infinite;margin-right:6px;vertical-align:middle;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .btn-back{background:none;border:none;color:var(--terra);font-size:13px;font-weight:600;cursor:pointer;padding:8px 0;text-decoration:underline;text-underline-offset:3px;margin-bottom:8px;}
+  .tagline{text-align:center;margin-top:40px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--terra);opacity:.7;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="brand-logo">epic farms<span class="reg">®</span></div>
+    <div class="brand-co">Cannabis Co. · Núñez</div>
+  </div>
+  <div class="divider"></div>
+
+  <!-- BUSCAR -->
+  <div id="viewSearch">
+    <div class="search-card">
+      <div class="search-title">Mi saldo</div>
+      <div class="search-sub">Ingresá tu nombre o número de socio</div>
+      <input class="search-input" id="queryInput" type="text" placeholder="Ej: Nico o 42" autocomplete="off" autocorrect="off" autocapitalize="off">
+      <button class="search-btn" id="searchBtn" onclick="buscar()">Ver mi saldo</button>
+      <div id="searchMsg"></div>
+    </div>
+  </div>
+
+  <!-- MÚLTIPLES RESULTADOS -->
+  <div id="viewMultiple" style="display:none">
+    <button class="btn-back" onclick="showSearch()">← Volver</button>
+    <div class="mov-title">¿Cuál sos vos?</div>
+    <div id="multiList"></div>
+  </div>
+
+  <!-- SALDO -->
+  <div id="viewSaldo" style="display:none">
+    <button class="btn-back" onclick="showSearch()">← Buscar de nuevo</button>
+    <div class="saldo-card">
+      <div class="saldo-nombre" id="saldoNombre"></div>
+      <div class="saldo-amount" id="saldoAmount">$0</div>
+      <div class="saldo-label">Saldo disponible · ARS</div>
+      <div class="saldo-sede" id="saldoSede"></div>
+    </div>
+    <div class="mov-section">
+      <div class="mov-title">Últimos movimientos</div>
+      <div id="movList"><div class="msg">Cargando…</div></div>
+    </div>
+  </div>
+
+  <div class="tagline">Ease of mind</div>
+</div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbzKDGa2b0ZORXwUuZRWq1LTLZKQybL3nh4Dh0O24S0EcJxJdHUurgCC0sgZNMvBNh0Y/exec";
+let _n = 0;
+
+function jsonp(url, ok, err) {
+  const cb = '_cb' + (_n++) + '_' + Date.now();
+  let done = false;
+  const s = document.createElement('script');
+  const t = setTimeout(() => { if(done)return; done=true; delete window[cb]; s.remove(); err('Tiempo agotado'); }, 12000);
+  window[cb] = d => { if(done)return; done=true; clearTimeout(t); delete window[cb]; s.remove(); ok(d); };
+  s.src = url + (url.includes('?')?'&':'?') + 'callback=' + cb;
+  s.onerror = () => { if(done)return; done=true; clearTimeout(t); delete window[cb]; s.remove(); err('Error de conexión'); };
+  document.body.appendChild(s);
+}
+
+function showSearch() {
+  document.getElementById('viewSearch').style.display = '';
+  document.getElementById('viewMultiple').style.display = 'none';
+  document.getElementById('viewSaldo').style.display = 'none';
+  document.getElementById('searchMsg').innerHTML = '';
+}
+
+function setMsg(html, isError) {
+  document.getElementById('searchMsg').innerHTML = `<div class="msg ${isError?'error':''}">${html}</div>`;
+}
+
+function buscar() {
+  const q = document.getElementById('queryInput').value.trim();
+  if (!q) { setMsg('Ingresá tu nombre o número', true); return; }
+  const btn = document.getElementById('searchBtn');
+  btn.disabled = true;
+  setMsg('<span class="spinner"></span> Buscando…');
+  jsonp(API + '?action=getSaldo&query=' + encodeURIComponent(q),
+    data => {
+      btn.disabled = false;
+      if (!data.ok) { setMsg(data.error, true); return; }
+      if (data.multiple) { showMultiple(data.results); return; }
+      showSaldo(data.socio);
+    },
+    err => { btn.disabled = false; setMsg('Sin conexión. Reintentá.', true); }
+  );
+}
+
+function showMultiple(results) {
+  document.getElementById('viewSearch').style.display = 'none';
+  document.getElementById('viewMultiple').style.display = '';
+  document.getElementById('multiList').innerHTML = results.map(s =>
+    `<div class="multi-card" onclick="showSaldo(${JSON.stringify(s).replace(/"/g,'&quot;')})">
+      <div><div class="multi-nombre">${s.nombre}</div><div class="multi-sub">Socio #${s.id} · ${s.sede}</div></div>
+      <div class="multi-arrow">›</div>
+    </div>`
+  ).join('');
+}
+
+function showSaldo(socio) {
+  document.getElementById('viewSearch').style.display = 'none';
+  document.getElementById('viewMultiple').style.display = 'none';
+  document.getElementById('viewSaldo').style.display = '';
+  document.getElementById('saldoNombre').textContent = socio.nombre;
+  document.getElementById('saldoAmount').textContent = '$' + Number(socio.saldo).toLocaleString('es-AR');
+  document.getElementById('saldoSede').textContent = '● ' + socio.sede;
+  // Cargar movimientos
+  jsonp(API + '?action=getMovimientos&id=' + encodeURIComponent(socio.id),
+    data => {
+      const movs = data.movimientos || [];
+      if (!movs.length) {
+        document.getElementById('movList').innerHTML = '<div class="msg">Sin movimientos aún</div>';
+        return;
+      }
+      document.getElementById('movList').innerHTML = movs.slice(0,10).map(m =>
+        `<div class="mov-row">
+          <div class="mov-info">
+            <div class="mov-desc">${m.desc || m.tipo}</div>
+            <div class="mov-fecha">${m.fecha}</div>
+          </div>
+          <div class="mov-monto ${m.monto < 0 ? 'gasto':'carga'}">
+            ${m.monto > 0 ? '+' : ''}$${Math.abs(m.monto).toLocaleString('es-AR')}
+          </div>
+        </div>`
+      ).join('');
+    },
+    () => { document.getElementById('movList').innerHTML = '<div class="msg">No se pudieron cargar los movimientos</div>'; }
+  );
+}
+
+document.getElementById('queryInput').addEventListener('keydown', e => { if(e.key==='Enter') buscar(); });
+</script>
+</body>
+</html>

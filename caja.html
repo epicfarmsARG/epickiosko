@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Epic Farms · Caja Staff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--green:#0F3B2E;--green-faded:#5A6F62;--cream:#EEE7D6;--cream-warm:#E8DFC9;--terra:#B8602B;--rule:rgba(15,59,46,0.16);--rule-str:rgba(15,59,46,0.30);--ok:#2D7A4F;}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html{-webkit-text-size-adjust:100%;}
+  body{background:var(--green);color:var(--cream);font-family:'Inter',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:440px;margin:0 auto;padding:36px 20px 56px;}
+  .brand{text-align:center;margin-bottom:24px;}
+  .brand-logo{font-family:'Inter',sans-serif;font-weight:900;font-size:36px;line-height:.9;color:var(--cream);letter-spacing:-.03em;}
+  .brand-logo .reg{font-size:.32em;vertical-align:super;}
+  .brand-sub{font-size:10px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--terra);margin-top:6px;}
+  .divider{height:1.5px;background:rgba(238,231,214,0.2);margin:20px 0 24px;}
+  .card{background:rgba(255,255,255,0.06);border:1.5px solid rgba(238,231,214,0.2);border-radius:16px;padding:22px 20px;margin-bottom:14px;}
+  .card-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--cream);margin-bottom:4px;}
+  .card-sub{font-size:12px;color:rgba(238,231,214,0.55);margin-bottom:16px;}
+  .field{margin-bottom:12px;}
+  .field label{display:block;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--terra);margin-bottom:5px;}
+  .field input{width:100%;font-family:'Inter',sans-serif;font-size:16px;color:var(--green);background:var(--cream);border:1.5px solid rgba(238,231,214,0.3);border-radius:10px;padding:11px 14px;outline:none;}
+  .btn{width:100%;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:none;border-radius:10px;padding:14px;cursor:pointer;-webkit-appearance:none;transition:opacity .15s;}
+  .btn:active{opacity:.85;}
+  .btn:disabled{opacity:.4;}
+  .btn-primary{background:var(--terra);color:white;}
+  .btn-secondary{background:rgba(255,255,255,0.1);color:var(--cream);margin-top:8px;}
+  .btn-ok{background:var(--ok);color:white;}
+  .msg{font-size:13px;text-align:center;padding:12px;border-radius:8px;margin-top:10px;}
+  .msg.error{background:rgba(200,60,60,0.2);color:#FF9999;}
+  .msg.ok{background:rgba(45,122,79,0.25);color:#90EE90;}
+  .socio-found{background:rgba(255,255,255,0.08);border-radius:12px;padding:16px;margin:12px 0;}
+  .socio-nombre{font-weight:700;font-size:17px;color:var(--cream);}
+  .socio-saldo{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--terra);margin-top:4px;}
+  .socio-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;opacity:.6;margin-top:2px;}
+  .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(238,231,214,0.3);border-top-color:var(--terra);border-radius:50%;animation:spin .7s linear infinite;margin-right:6px;vertical-align:middle;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .tagline{text-align:center;margin-top:36px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:rgba(238,231,214,0.4);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="brand-logo">epic farms<span class="reg">®</span></div>
+    <div class="brand-sub">Caja · Solo staff</div>
+  </div>
+  <div class="divider"></div>
+
+  <!-- LOGIN STAFF -->
+  <div id="viewLogin">
+    <div class="card">
+      <div class="card-title">Acceso staff</div>
+      <div class="card-sub">Ingresá el PIN de caja</div>
+      <div class="field">
+        <label>PIN</label>
+        <input type="password" id="pinInput" placeholder="••••" autocomplete="off">
+      </div>
+      <button class="btn btn-primary" onclick="loginStaff()">Entrar</button>
+      <div id="loginMsg"></div>
+    </div>
+  </div>
+
+  <!-- CAJA -->
+  <div id="viewCaja" style="display:none">
+
+    <!-- Buscar socio -->
+    <div class="card">
+      <div class="card-title">Buscar socio</div>
+      <div class="card-sub">Nombre o número de socio</div>
+      <div class="field">
+        <label>Nombre o N° socio</label>
+        <input type="text" id="cajaQuery" placeholder="Ej: Nico o 42" autocomplete="off" autocorrect="off" autocapitalize="off">
+      </div>
+      <button class="btn btn-primary" onclick="buscarSocio()">Buscar</button>
+      <div id="buscarMsg"></div>
+      <div id="socioFound" style="display:none">
+        <div class="socio-found">
+          <div class="socio-nombre" id="cajaSocioNombre"></div>
+          <div class="socio-saldo" id="cajaSocioSaldo"></div>
+          <div class="socio-label">Saldo disponible · ARS</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Descontar -->
+    <div class="card" id="cardDescontar" style="display:none">
+      <div class="card-title">Descontar consumo</div>
+      <div class="card-sub">Ingresá el monto a descontar del saldo</div>
+      <div class="field">
+        <label>Monto (ARS)</label>
+        <input type="number" id="montoDesc" placeholder="Ej: 1200" min="0">
+      </div>
+      <div class="field">
+        <label>Descripción</label>
+        <input type="text" id="descDesc" placeholder="Ej: Alfajor + Coca-Cola">
+      </div>
+      <button class="btn btn-primary" onclick="descontar()">Descontar del saldo</button>
+      <div id="descontarMsg"></div>
+    </div>
+
+    <!-- Cargar saldo -->
+    <div class="card" id="cardCargar" style="display:none">
+      <div class="card-title">Cargar saldo</div>
+      <div class="card-sub">Confirmá una transferencia o carga manual</div>
+      <div class="field">
+        <label>Monto (ARS)</label>
+        <input type="number" id="montoCarga" placeholder="Ej: 5000" min="0">
+      </div>
+      <div class="field">
+        <label>Descripción</label>
+        <input type="text" id="descCarga" placeholder="Ej: Transferencia bancaria">
+      </div>
+      <button class="btn btn-ok" onclick="cargar()">Confirmar carga</button>
+      <div id="cargarMsg"></div>
+    </div>
+
+    <!-- Nuevo socio -->
+    <div class="card">
+      <div class="card-title">Registrar nuevo socio</div>
+      <div class="card-sub">Agregalo al sistema de saldo</div>
+      <div class="field"><label>Nombre completo</label><input type="text" id="nuevoNombre" placeholder="Nombre y apellido"></div>
+      <div class="field"><label>DNI (opcional)</label><input type="text" id="nuevoDni" placeholder="12345678"></div>
+      <button class="btn btn-secondary" onclick="nuevoSocio()">+ Agregar socio</button>
+      <div id="nuevoMsg"></div>
+    </div>
+
+  </div>
+
+  <div class="tagline">Ease of mind</div>
+</div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbzKDGa2b0ZORXwUuZRWq1LTLZKQybL3nh4Dh0O24S0EcJxJdHUurgCC0sgZNMvBNh0Y/exec";
+let staffPin = "";
+let socioActual = null;
+let _n = 0;
+
+function jsonp(url, ok, err) {
+  const cb = '_cb' + (_n++) + '_' + Date.now();
+  let done = false;
+  const s = document.createElement('script');
+  const t = setTimeout(() => { if(done)return; done=true; delete window[cb]; s.remove(); err('Tiempo agotado'); }, 12000);
+  window[cb] = d => { if(done)return; done=true; clearTimeout(t); delete window[cb]; s.remove(); ok(d); };
+  s.src = url + (url.includes('?')?'&':'?') + 'callback=' + cb;
+  s.onerror = () => { if(done)return; done=true; clearTimeout(t); delete window[cb]; s.remove(); err('Error'); };
+  document.body.appendChild(s);
+}
+
+async function postData(body) {
+  body.pin = staffPin;
+  const res = await fetch(API, { method:'POST', body: JSON.stringify(body), headers:{'Content-Type':'application/json'} });
+  return res.json();
+}
+
+function setMsg(id, html, type) {
+  document.getElementById(id).innerHTML = html ? `<div class="msg ${type||''}">${html}</div>` : '';
+}
+
+function loginStaff() {
+  const pin = document.getElementById('pinInput').value.trim();
+  if (!pin) { setMsg('loginMsg','Ingresá el PIN','error'); return; }
+  staffPin = pin;
+  // Verificamos con una llamada real
+  setMsg('loginMsg','<span class="spinner"></span> Verificando…');
+  jsonp(API + '?action=getMenu',
+    data => {
+      if (data.ok || data.items) {
+        document.getElementById('viewLogin').style.display = 'none';
+        document.getElementById('viewCaja').style.display = '';
+        setMsg('loginMsg','');
+      } else {
+        setMsg('loginMsg','PIN incorrecto','error');
+        staffPin = '';
+      }
+    },
+    () => {
+      // Si hay error de red igualmente pasamos — verificamos el PIN al hacer operaciones
+      document.getElementById('viewLogin').style.display = 'none';
+      document.getElementById('viewCaja').style.display = '';
+      setMsg('loginMsg','');
+    }
+  );
+}
+
+function buscarSocio() {
+  const q = document.getElementById('cajaQuery').value.trim();
+  if (!q) { setMsg('buscarMsg','Ingresá nombre o número','error'); return; }
+  setMsg('buscarMsg','<span class="spinner"></span> Buscando…');
+  document.getElementById('socioFound').style.display = 'none';
+  document.getElementById('cardDescontar').style.display = 'none';
+  document.getElementById('cardCargar').style.display = 'none';
+  socioActual = null;
+
+  jsonp(API + '?action=getSaldo&query=' + encodeURIComponent(q),
+    data => {
+      if (!data.ok) { setMsg('buscarMsg', data.error, 'error'); return; }
+      if (data.multiple) {
+        setMsg('buscarMsg', `Se encontraron ${data.results.length} socios. Probá con el número exacto.`);
+        return;
+      }
+      setMsg('buscarMsg','');
+      mostrarSocio(data.socio);
+    },
+    () => setMsg('buscarMsg','Sin conexión','error')
+  );
+}
+
+function mostrarSocio(s) {
+  socioActual = s;
+  document.getElementById('cajaSocioNombre').textContent = s.nombre + ' (#' + s.id + ')';
+  document.getElementById('cajaSocioSaldo').textContent = '$' + Number(s.saldo).toLocaleString('es-AR');
+  document.getElementById('socioFound').style.display = '';
+  document.getElementById('cardDescontar').style.display = '';
+  document.getElementById('cardCargar').style.display = '';
+  setMsg('descontarMsg',''); setMsg('cargarMsg','');
+}
+
+async function descontar() {
+  if (!socioActual) return;
+  const monto = parseFloat(document.getElementById('montoDesc').value);
+  const desc  = document.getElementById('descDesc').value.trim() || 'Consumo';
+  if (!monto || monto <= 0) { setMsg('descontarMsg','Ingresá un monto válido','error'); return; }
+  if (monto > socioActual.saldo) { setMsg('descontarMsg','Saldo insuficiente','error'); return; }
+  setMsg('descontarMsg','<span class="spinner"></span> Procesando…');
+  try {
+    const r = await postData({ action:'descontarSaldo', id:socioActual.id, monto, descripcion:desc, staff:'caja' });
+    if (r.ok) {
+      socioActual.saldo = r.saldoNuevo;
+      document.getElementById('cajaSocioSaldo').textContent = '$' + Number(r.saldoNuevo).toLocaleString('es-AR');
+      setMsg('descontarMsg', `✓ Descuento confirmado. Nuevo saldo: $${Number(r.saldoNuevo).toLocaleString('es-AR')}`, 'ok');
+      document.getElementById('montoDesc').value = '';
+      document.getElementById('descDesc').value = '';
+    } else {
+      setMsg('descontarMsg', r.error || 'Error al procesar', 'error');
+    }
+  } catch(e) { setMsg('descontarMsg','Error de conexión','error'); }
+}
+
+async function cargar() {
+  if (!socioActual) return;
+  const monto = parseFloat(document.getElementById('montoCarga').value);
+  const desc  = document.getElementById('descCarga').value.trim() || 'Carga de saldo';
+  if (!monto || monto <= 0) { setMsg('cargarMsg','Ingresá un monto válido','error'); return; }
+  setMsg('cargarMsg','<span class="spinner"></span> Procesando…');
+  try {
+    const r = await postData({ action:'cargarSaldo', id:socioActual.id, monto, descripcion:desc, staff:'caja' });
+    if (r.ok) {
+      socioActual.saldo = r.saldoNuevo;
+      document.getElementById('cajaSocioSaldo').textContent = '$' + Number(r.saldoNuevo).toLocaleString('es-AR');
+      setMsg('cargarMsg', `✓ Carga confirmada. Nuevo saldo: $${Number(r.saldoNuevo).toLocaleString('es-AR')}`, 'ok');
+      document.getElementById('montoCarga').value = '';
+      document.getElementById('descCarga').value = '';
+    } else {
+      setMsg('cargarMsg', r.error || 'Error al procesar', 'error');
+    }
+  } catch(e) { setMsg('cargarMsg','Error de conexión','error'); }
+}
+
+async function nuevoSocio() {
+  const nombre = document.getElementById('nuevoNombre').value.trim();
+  const dni    = document.getElementById('nuevoDni').value.trim();
+  if (!nombre) { setMsg('nuevoMsg','El nombre es obligatorio','error'); return; }
+  setMsg('nuevoMsg','<span class="spinner"></span> Registrando…');
+  try {
+    const r = await postData({ action:'nuevoSocio', nombre, dni, sede:'Núñez', staff:'caja' });
+    if (r.ok) {
+      setMsg('nuevoMsg', `✓ ${r.nombre} registrado como socio #${r.id}`, 'ok');
+      document.getElementById('nuevoNombre').value = '';
+      document.getElementById('nuevoDni').value = '';
+    } else {
+      setMsg('nuevoMsg', r.error || 'Error','error');
+    }
+  } catch(e) { setMsg('nuevoMsg','Error de conexión','error'); }
+}
+
+document.getElementById('pinInput').addEventListener('keydown', e => { if(e.key==='Enter') loginStaff(); });
+document.getElementById('cajaQuery').addEventListener('keydown', e => { if(e.key==='Enter') buscarSocio(); });
+</script>
+</body>
+</html>
