@@ -191,20 +191,46 @@ const MP_LINK_GENERICO = "https://mpago.la/"; // actualizar con link real
 let productos = [];
 let cart = {};
 
-// Cargar menú desde Apps Script
-async function loadMenu() {
-  try {
-    const res = await fetch(APPS_SCRIPT_URL + "?action=getMenu");
-    const data = await res.json();
-    if (data.ok && data.items) {
-      productos = data.items.filter(p => p.activo === "SI" || p.activo === true);
-      renderMenu();
-    } else {
-      showError("No se pudo cargar el menú.");
+// JSONP helper (evita bloqueo CORS de Apps Script)
+let _cbCount = 0;
+function jsonpRequest(url, onSuccess, onError) {
+  const cb = '_epicCb' + (_cbCount++) + '_' + Date.now();
+  let done = false;
+  const script = document.createElement('script');
+  const timer = setTimeout(() => {
+    if (done) return; done = true;
+    delete window[cb]; script.remove();
+    onError('Tiempo de espera agotado.');
+  }, 12000);
+  window[cb] = function(data) {
+    if (done) return; done = true;
+    clearTimeout(timer); delete window[cb]; script.remove();
+    onSuccess(data);
+  };
+  script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cb;
+  script.onerror = function() {
+    if (done) return; done = true;
+    clearTimeout(timer); delete window[cb]; script.remove();
+    onError('Error de conexión.');
+  };
+  document.body.appendChild(script);
+}
+
+function loadMenu() {
+  jsonpRequest(
+    APPS_SCRIPT_URL + "?action=getMenu",
+    function(data) {
+      if (data.ok && data.items) {
+        productos = data.items.filter(p => p.activo === "SI" || p.activo === true);
+        renderMenu();
+      } else {
+        showError("No se pudo cargar el menú.");
+      }
+    },
+    function(err) {
+      showError("Sin conexión. Reintentá en unos segundos.");
     }
-  } catch(e) {
-    showError("Sin conexión. Reintentá en unos segundos.");
-  }
+  );
 }
 
 function showError(msg) {
