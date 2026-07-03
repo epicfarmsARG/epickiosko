@@ -199,6 +199,15 @@ function showSaldo(socio) {
 }
 
 document.getElementById('queryInput').addEventListener('keydown', e => { if(e.key==='Enter') buscar(); });
+
+// Auto-buscar si viene ?q= en la URL (desde el botón del menú)
+(function(){
+  const q = new URLSearchParams(window.location.search).get('q');
+  if (q) {
+    document.getElementById('queryInput').value = q;
+    buscar();
+  }
+})();
 </script>
 </body>
 </html>
